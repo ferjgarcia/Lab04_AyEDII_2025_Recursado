@@ -45,9 +45,8 @@ int main(void) {
     n->age = 100;
     n->name_initial = 'F';
 
-    int *f = NULL;
-    f = &a[1];
-    *f = 42;
+    p = &a[1];
+    *p = 42;
 
     printf("x = %d\n", x);
     printf("m = (%d, %c)\n", m.age, m.name_initial);
