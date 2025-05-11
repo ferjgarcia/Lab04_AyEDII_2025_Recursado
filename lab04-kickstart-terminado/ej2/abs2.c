@@ -3,6 +3,7 @@
 #include <assert.h>
 
 void absolute(int x, int *y) {
+    printf("El valor de Y es: %ls \n", y);
     if (x >= 0)
         *y = x;
     else 
