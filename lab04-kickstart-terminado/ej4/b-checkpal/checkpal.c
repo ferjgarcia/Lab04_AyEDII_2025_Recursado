@@ -5,7 +5,7 @@
 
 #include "strfuncs.h"
 
-#define MAX_LENGTH 20
+#define MAX_LENGTH 40 //era 20
 
 #define SIZEOF_ARRAY(s) (sizeof(s) / sizeof(*s))
 
@@ -15,15 +15,29 @@ int main(void) {
     char *filtered=NULL;
 
     printf("Ingrese un texto (no más de %d símbolos) para verificar palíndromo: ", MAX_LENGTH);
-    scanf("%s", user_input);
+    //scanf("%s", user_input);
+    if (fgets(user_input, MAX_LENGTH, stdin) == NULL) {
+        fprintf(stderr, "Error leyendo entrada.\n");
+        return EXIT_FAILURE;
+    }
+    size_t len = string_length(user_input);
+    user_input[len-1] = '\0'; /*hola\n\0 strinf_length(user_input) = 5 porq 
+    cuenta el \n asi q len-1 = \n y lo remplazo con \0*/
     filtered = string_filter(user_input, ignore_chars[0]);
     for (unsigned int i=0; i < SIZEOF_ARRAY(ignore_chars); i++) {
-        filtered = string_filter(filtered, ignore_chars[i]);
+        //filtered = string_filter(filtered, ignore_chars[i]);
+        char *tmp = string_filter(filtered, ignore_chars[i]);
+        free(filtered);   //libero la anterior
+        filtered = tmp;   //uso la nueva
     }
 
     printf("El texto:\n\n"
             "\"%s\" \n\n"
             "%s un palíndromo.\n\n", user_input, string_is_symmetric(filtered) ? "Es": "NO es");
+
+    free(filtered);   //libera la memoria
+
     return EXIT_SUCCESS;
 }
 
+/*El problema esta en q el scanf lee hasta el primer espacio*/

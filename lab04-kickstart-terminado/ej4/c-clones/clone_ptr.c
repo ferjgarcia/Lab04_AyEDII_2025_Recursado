@@ -19,7 +19,7 @@ char *string_clone(const char *str, size_t length) {
 }
 
 int main(void) {
-    char original[]=""
+    char *original=""
          "______ time ago in a galaxy far, far away...\n\n\n"
          ANSI_BRGOLD
          "         _______..___________.     ___      .______             \n"
@@ -58,7 +58,7 @@ int main(void) {
          "                Jedi....\n" ANSI_WHITE;
     char *copy=NULL;
 
-    copy = string_clone(original, sizeof(original)/sizeof(*original));
+    copy = string_clone(original, sizeof(original));
     printf("Original:\n" ANSI_CYAN
             " %s\n", original);
     copy[0] = 'A';
@@ -74,21 +74,3 @@ int main(void) {
 
     return EXIT_SUCCESS;
 }
-
-   /*
-   Estás devolviendo un puntero a una variable local (clon) que vive en el stack. 
-   Una vez que string_clone() termina, esa memoria queda inválida. Cualquier acceso
-   posterior (como modificar copy[0] = 'A') es comportamiento indefinido.
-
-    Esto es lo que te muestra Valgrind:
-
-    ==13158== Invalid write of size 1
-    ==13158==    at 0x1092AF: main (clone.c:63)
-    ==13158==  Address 0x1ffeffeda0 is on thread 1's stack
-    ==13158==  1856 bytes below stack pointer
-
-Significa: estás escribiendo en memoria del stack ya liberada o fuera de contexto.
-   
-   (gcc -Wall -Werror -Wextra -pedantic -std=c99 -g clone.c -o ejecutar) 
-    NOTAR QUE PUSE LA -G
-   Cuando llamo con gdb b clone.c:8 y hago p length me devuelve 1812 */
